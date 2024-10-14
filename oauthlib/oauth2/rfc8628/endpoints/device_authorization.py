@@ -40,7 +40,7 @@ class DeviceAuthorizationEndpoint(BaseEndpoint):
         expires_in=1800,
         interval=None,
         verification_uri_complete=None,
-        user_code_generator: Callable[[None], str] = None
+        user_code_generator: Callable[[None], str] = None,
     ):
         """
         :param request_validator: An instance of RequestValidator.
@@ -52,7 +52,6 @@ class DeviceAuthorizationEndpoint(BaseEndpoint):
         :param user_code_generator: a callable that returns a configurable user code
         """
         self.request_validator = request_validator
-        self.user_code_generator = user_code_generator
         self._expires_in = expires_in
         self._interval = interval
         self._verification_uri = verification_uri

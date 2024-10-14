@@ -17,7 +17,7 @@ from oauthlib.oauth2.rfc6749.grant_types import (
     AuthorizationCodeGrant as OAuth2AuthorizationCodeGrant,
     ClientCredentialsGrant,
     ImplicitGrant as OAuth2ImplicitGrant,
-    ResourceOwnerPasswordCredentialsGrant,
+    ResourceOwnerPasswordCredentialsGrant, DeviceCodeGrant,
 )
 from oauthlib.oauth2.rfc6749.tokens import BearerToken
 from oauthlib.oauth2.rfc8628.endpoints import DeviceAuthorizationEndpoint
@@ -77,6 +77,7 @@ class Server(
         self.openid_connect_auth = AuthorizationCodeGrant(request_validator)
         self.openid_connect_implicit = ImplicitGrant(request_validator)
         self.openid_connect_hybrid = HybridGrant(request_validator)
+        self.device_code_grant = DeviceCodeGrant(request_validator)
 
         self.bearer = BearerToken(
             request_validator, token_generator, token_expires_in, refresh_token_generator
@@ -123,6 +124,7 @@ class Server(
                 "password": self.password_grant,
                 "client_credentials": self.credentials_grant,
                 "refresh_token": self.refresh_grant,
+                "urn:ietf:params:oauth:grant-type:device_code": self.device_code_grant
             },
             default_token_type=self.bearer,
         )
