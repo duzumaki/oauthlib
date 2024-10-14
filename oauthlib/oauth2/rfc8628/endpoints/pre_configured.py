@@ -3,6 +3,7 @@ from oauthlib.oauth2.rfc8628.endpoints.device_authorization import (
     DeviceAuthorizationEndpoint,
 )
 from typing import Callable
+import logging
 
 class DeviceApplicationServer(DeviceAuthorizationEndpoint, TokenEndpoint):
     """An all-in-one endpoint featuring Authorization code grant and Bearer tokens."""
