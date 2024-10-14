@@ -7,5 +7,6 @@ for consuming and providing OAuth 2.0 Device Authorization RFC8628.
 """
 
 import logging
+from .pre_configured import DeviceApplicationServer
 
 log = logging.getLogger(__name__)
