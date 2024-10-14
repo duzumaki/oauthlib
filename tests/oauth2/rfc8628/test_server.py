@@ -34,9 +34,7 @@ class DeviceAuthorizationEndpointTest(TestCase):
     @mock.patch("oauthlib.oauth2.rfc8628.endpoints.device_authorization.generate_token")
     def test_device_authorization_grant(self, generate_token):
         generate_token.side_effect = ["abc", "def"]
-        _, body, status_code = self.endpoint.create_device_authorization_response(
-            *self.response_payload()
-        )
+        _, body, status_code = self.endpoint.create_device_authorization_response(*self.response_payload())
         expected_payload = {
             "verification_uri": "http://i.b/l/verify",
             "user_code": "abc",
