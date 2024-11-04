@@ -15,6 +15,7 @@ from .base import BaseEndpoint, catch_errors_and_unavailability
 log = logging.getLogger(__name__)
 
 
+
 class TokenEndpoint(BaseEndpoint):
 
     """Token issuing endpoint.

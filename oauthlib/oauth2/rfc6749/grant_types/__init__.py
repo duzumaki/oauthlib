@@ -9,3 +9,4 @@ from .refresh_token import RefreshTokenGrant
 from .resource_owner_password_credentials import (
     ResourceOwnerPasswordCredentialsGrant,
 )
+from .device_code import DeviceCodeGrant
