@@ -7,7 +7,7 @@ for providing OAuth 2.0 RFC6749 servers.
 """
 from ..grant_types import (
     AuthorizationCodeGrant, ClientCredentialsGrant, ImplicitGrant,
-    RefreshTokenGrant, ResourceOwnerPasswordCredentialsGrant, DeviceCodeGrant
+    RefreshTokenGrant, ResourceOwnerPasswordCredentialsGrant
 )
 from ..tokens import BearerToken
 from .authorization import AuthorizationEndpoint
@@ -15,7 +15,6 @@ from .introspect import IntrospectEndpoint
 from .resource import ResourceEndpoint
 from .revocation import RevocationEndpoint
 from .token import TokenEndpoint
-
 
 
 
@@ -59,14 +58,12 @@ class Server(AuthorizationEndpoint, IntrospectEndpoint, TokenEndpoint,
                                            'none': self.auth_grant
                                        },
                                        default_token_type=self.bearer)
-
         TokenEndpoint.__init__(self, default_grant_type='authorization_code',
                                grant_types={
                                    'authorization_code': self.auth_grant,
                                    'password': self.password_grant,
                                    'client_credentials': self.credentials_grant,
                                    'refresh_token': self.refresh_grant,
-                                   "device_code": self.device_code_grant
                                },
                                default_token_type=self.bearer)
         ResourceEndpoint.__init__(self, default_token='Bearer',
