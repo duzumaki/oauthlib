@@ -84,7 +84,7 @@ ignore = [
   "S106",
   "S107",
 ]
-line-length = 255
+line-length = 99
 target-version = "py37"
 
 # [tool.ruff.mccabe]
