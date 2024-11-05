@@ -8,14 +8,11 @@ log = logging.getLogger(__name__)
 
 
 class DeviceCodeGrant(GrantTypeBase):
-
     def create_authorization_response(self, request, token_handler):
         headers = self._get_default_headers()
         try:
-            log.debug('Validating access token request, %r.', request)
             self.validate_token_request(request)
         except errors.OAuth2Error as e:
-            log.debug('Client error in token request. %s.', e)
             headers.update(e.headers)
             return headers, e.json, e.status_code
 
@@ -26,10 +23,7 @@ class DeviceCodeGrant(GrantTypeBase):
 
         self.request_validator.save_token(token, request)
 
-        log.debug('Issuing token to client id %r (%r), %r.',
-                  request.client_id, request.client, token)
-        return headers, json.dumps(token), 200
-
+        return self.create_token_response(request, token_handler)
 
     def validate_token_request(self, request):
         """
@@ -68,3 +62,38 @@ class DeviceCodeGrant(GrantTypeBase):
 
         for validator in self.custom_validators.post_token:
             validator(request)
+
+    def create_token_response(self, request, token_handler):
+        """Return token or error in json format.
+
+        :param request: OAuthlib request.
+        :type request: oauthlib.common.Request
+        :param token_handler: A token handler instance, for example of type
+                              oauthlib.oauth2.BearerToken.
+
+        If the access token request is valid and authorized, the
+        authorization server issues an access token and optional refresh
+        token as described in `Section 5.1`_.  If the request failed client
+        authentication or is invalid, the authorization server returns an
+        error response as described in `Section 5.2`_.
+
+        .. _`Section 5.1`: https://tools.ietf.org/html/rfc6749#section-5.1
+        .. _`Section 5.2`: https://tools.ietf.org/html/rfc6749#section-5.2
+        """
+        headers = self._get_default_headers()
+        try:
+            if self.request_validator.client_authentication_required(request):
+                if not self.request_validator.authenticate_client(request):
+                    raise errors.InvalidClientError(request=request)
+
+            self.validate_token_request(request)
+
+        except errors.OAuth2Error as e:
+            headers.update(e.headers)
+            return headers, e.json, e.status_code
+
+        token = token_handler.create_token(request, self.refresh_token)
+
+        self.request_validator.save_token(token, request)
+
+        return headers, json.dumps(token), 200
