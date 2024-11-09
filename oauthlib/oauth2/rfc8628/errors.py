@@ -1,4 +1,7 @@
-class AuthorizationPendingError(Exception):
+from oauthlib.oauth2.rfc6749.errors import OAuth2Error
+
+
+class AuthorizationPendingError(OAuth2Error):
     """
     For the device authorization grant;
       The authorization request is still pending as the end user hasn't
@@ -14,7 +17,7 @@ class AuthorizationPendingError(Exception):
     error = 'authorization_pending'
 
 
-class SlowDownError(Exception):
+class SlowDownError(OAuth2Error):
     """
     A variant of "authorization_pending", the authorization request is
     still pending and polling should continue, but the interval MUST
@@ -22,7 +25,7 @@ class SlowDownError(Exception):
     """
     error = 'slow_down'
 
-class ExpiredTokenError(Exception):
+class ExpiredTokenError(OAuth2Error):
     """
     The "device_code" has expired, and the device authorization
     session has concluded.  The client MAY commence a new device
@@ -31,7 +34,7 @@ class ExpiredTokenError(Exception):
     """
     error = 'expired_token'
 
-class AccessDenied(Exception):
+class AccessDenied(OAuth2Error):
     """
     The authorization request was denied.
     """
