@@ -30,3 +30,9 @@ class ExpiredTokenError(Exception):
     restarting to avoid unnecessary polling.
     """
     error = 'expired_token'
+
+class AccessDenied(Exception):
+    """
+    The authorization request was denied.
+    """
+    error = 'access_denied'
